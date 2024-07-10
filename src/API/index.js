@@ -1,65 +1,18 @@
-import {
-    deleteApi, getApi, postApi, getApiWithoutToken,
-    postApiWithoutToken, putApi, getApiAWS
-} from "./api-interface";
+import axios from 'axios';
 
-export const getAllPostBycat = () => {
-    return getApiAWS("get-all-posts");
-};
-export const getAllcash = () => {
-    return getApiWithoutToken("all-data-cash");
-};
-export const getDaly = () => {
-    return getApiWithoutToken(`getPostByList?List=certificate`);
+const API_URL = 'http://localhost:4000';
+
+export const fetchTokens = async () => {
+    const response = await axios.get(`${API_URL}/tokens`);
+    return response.data;
 };
 
-export const searchsPost = (page) => {
-    return getApiWithoutToken(`searchs-post?search=${page}`);
+export const fetchQuote = async (token, chain) => {
+    const response = await axios.post(`${API_URL}/quotes`, { token, chain });
+    return response.data;
 };
 
-export const getPostByIdApi = (id) => {
-    return getApiWithoutToken(`getPostById?id=${id}`);
-};
-
-export const getPostBySlug = (id) => {
-    return getApiWithoutToken(`get-post-by-slug?id=${id}`);
-};
-export const getPostBytype = (type, currentPage) => {
-    return getApiWithoutToken(`get-all-post-by-cat?cat=${type}&page=${currentPage}`);
-};
-// export const getApiWithoutToken = (path, payload) => {
-//     return getApi(path, payload);
-// };
-
-
-
-// users api
-
-export const userLogin = (payload) => {
-    return postApiWithoutToken(`users/login`, payload);
-};
-
-export const postsAdd = (userId, id) => {
-    return putApi(`users/addItems?id=${id}&userId=${userId}`);
-};
-
-export const getJobListApi = (userId) => {
-    return getApi(`users/getItem?userId=${userId}`);
-}
-export const removeJobApi = (id) => {
-    return postApi(`users/removeItem?id=${id}`);
-}
-export const deleteUserApi = (id) => {
-    return deleteApi(`/api/deleteUser/${id}`, id);
-};
-
-export const suspendUserApi = (id) => {
-    return deleteApi(`/api/suspenedUserById?id=${id}`);
-};
-export const getAllPagesApi = () => {
-    return getApi('getAllPost');
-}
-export const loginApi = (payload) => {
-
-    return postApiWithoutToken("/users/adminLogin", payload);
+export const fetchTransactionParams = async (quote) => {
+    const response = await axios.post(`${API_URL}/params`, { quote });
+    return response.data;
 };
